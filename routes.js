@@ -55,8 +55,18 @@ router.delete("/:qid/answers/:aid",(req,res)=>{
 
 //Vote - upvote or downvote a specific answer
 //:dir (direction) can have up or down values
+//here 3 params are taken the second one acts as a validator to check if the vote is up or down and nothing else
 
 router.post("/:qid/answers/:aid/vote-:dir",(req,res)=>{
+  //check if it has any other value
+    if(req.params.dir.search(/^(up|down)$/)==-1){
+        var err=new Error("Not Found");
+        err.status=404;
+        next(err); //send error
+    }else{
+        next();  //send response
+    }
+},(req,res)=>{
     res.json({ response: "working post vote-"+req.params.dir,
     questionId:req.params.qid,
     answerId:req.params.aid,
